@@ -1,0 +1,6 @@
+title: "Image Downloader for EPAM task #2"
+description: "Allows users to list objects in buckets and download specific objects."
+stage: "ALPHA"
+includedPermissions:
+  - storage.objects.get
+  - storage.objects.list
