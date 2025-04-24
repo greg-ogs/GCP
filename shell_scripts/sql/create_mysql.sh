@@ -6,9 +6,6 @@ SUBNET1_NAME="main"
 SUBNET1_REGION="us-central1"
 SUBNET1_CIDR="10.1.0.0/24"
 
-# Secret Manager configuration
-SECRET_MANAGER_API="secretmanager.googleapis.com"
-
 # Create the network where all the resources gonna be deployed.
 echo "Creating network"
 gcloud compute networks create "$VPC_NAME" \
@@ -26,7 +23,6 @@ gcloud compute networks subnets create "$SUBNET1_NAME" \
     --region="$SUBNET1_REGION"
 
 gcloud compute networks describe "$VPC_NAME" --project=$(gcloud config get-value project)
-
 gcloud compute networks subnets describe "$SUBNET1_NAME" --region="$SUBNET1_REGION" --project=$(gcloud config get-value project)
 
 # Configure firewall rule for ssh
@@ -48,6 +44,8 @@ PROJECT_ID=$(gcloud config get-value project)
 
 # Enable required APIs
 gcloud services enable $SERVICE_NETWORKING_API --project=$PROJECT_ID
+# Secret Manager configuration
+SECRET_MANAGER_API="secretmanager.googleapis.com"
 gcloud services enable $SECRET_MANAGER_API --project=$PROJECT_ID
 
 # Create secrets for database credentials in the same region as the Cloud SQL instance
@@ -56,21 +54,21 @@ DB_NAME="alchemy"
 
 # Create secret for DB_USER
 echo "Creating secret for DB_USER..."
-gcloud secrets create DB_USER \
-    --project=$PROJECT_ID \
-    --replication-policy=user-managed \
-    --locations=$SUBNET1_REGION \
-    --labels=purpose=database,environment=sandbox,resource=cloudsql \
-    --data-file=./secret.txt
-
-# Create secret for DB_PASS
-echo "Creating secret for DB_PASS..."
-printf "${DB_PASS}" | gcloud secrets create DB_PASS \
+printf "${DB_USER}" | gcloud secrets create DB_USER \
     --project=$PROJECT_ID \
     --replication-policy=user-managed \
     --locations=$SUBNET1_REGION \
     --labels=purpose=database,environment=sandbox,resource=cloudsql \
     --data-file=-
+
+# Create secret for DB_PASS
+echo "Creating secret for DB_PASS..."
+gcloud secrets create DB_PASS \
+    --project=$PROJECT_ID \
+    --replication-policy=user-managed \
+    --locations=$SUBNET1_REGION \
+    --labels=purpose=database,environment=sandbox,resource=cloudsql \
+    --data-file=/mnt/d/EPAMGCP/shell_scripts/sql/secret.txt
 
 # Create secret for DB_NAME
 echo "Creating secret for DB_NAME..."
