@@ -19,8 +19,8 @@ gcloud compute instances create "${VM1_NAME}" \
     --provisioning-model=STANDARD \
     --service-account="${SERVICE_ACCOUNT_NAME}" \
     --tags=http-server,https-server \
-    --create-disk=auto-delete=yes,boot=yes,device-name="${VM1_NAME}",image=projects/debian-cloud/global/images/debian-12-bookworm-v20250415,mode=rw,size=10 \
-    --create-disk=auto-delete=no,device-name="${ADDITIONAL_DISK_VM1_NAME}",mode=rw,size=10,type=pd-balanced \
+    --create-disk=auto-delete=yes,boot=yes,device-name="${VM1_NAME}",image=projects/debian-cloud/global/images/debian-12-bookworm-v20250415,size=10 \
+    --create-disk=auto-delete=no,boot=no,device-name="${ADDITIONAL_DISK_VM1_NAME}",size=10,type=pd-balanced \
     --reservation-affinity=any \
     --no-shielded-secure-boot \
     --shielded-vtpm \
@@ -83,7 +83,7 @@ gcloud compute instances create "${VM2_NAME}" \
     --service-account="${SERVICE_ACCOUNT_NAME}" \
     --tags=http-server,https-server \
     --create-disk=auto-delete=yes,boot=yes,device-name="${VM2_NAME}",source-snapshot=cmtr-14dfb3bf-snapshot \
-    --create-disk=auto-delete=no,device-name="${ADDITIONAL_DISK_VM2_NAME}",mode=rw,size=10GB,type=pd-balanced \
+    --create-disk=auto-delete=no,boot=no,device-name="${ADDITIONAL_DISK_VM2_NAME}",size=10GB,type=pd-balanced \
     --no-shielded-secure-boot \
     --shielded-vtpm \
     --shielded-integrity-monitoring \
