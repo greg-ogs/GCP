@@ -240,7 +240,7 @@ gcloud compute instance-templates create "${INSTANCE_TEMPLATE_NAME0}" \
     export DB_PASS=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/DB_PASS" -H "Metadata-Flavor: Google")
     export DB_NAME=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/DB_NAME" -H "Metadata-Flavor: Google")
     export INSTANCE_CONNECTION_NAME=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/INSTANCE_CONNECTION_NAME" -H "Metadata-Flavor: Google")
-
+    export GOOGLE_APPLICATION_CREDENTIALS="/app/key.json"
     git clone https://github.com/GoogleCloudPlatform/python-docs-samples  && \
         cd /app/python-docs-samples/cloud-sql/mysql/sqlalchemy && \
         /app/main/bin/pip install -r requirements.txt
