@@ -1,42 +1,20 @@
 #!/bin/bash
 
 # Define variables
-INSTANCE_TEMPLATE_NAME="nginx"
 HEALTH_CHECK_NAME="common"
 MACHINE_TYPE="n1-standard-1"
 FIREWALL_RULE_NAME="defaul-allow-http"
 SSH_KEY="${USER}":"${KEY}"
-MIG_NAME="nginx"
 REGION="us-central1"
 ZONES="us-central1-a,us-central1-c"
 VPC_NAME="default"
-SUBNET=main""
+SUBNET=main
 
-# MySQL instance variables
-MYSQL_INSTANCE_NAME="private-mysql-instance"
-MYSQL_ZONE="us-central1-c"
-MYSQL_VERSION="MYSQL_8_0"
-MYSQL_TIER="db-f1-micro"
 PROJECT_ID=$(gcloud config get-value project)
-# Extract region from zone (remove the last part after the last dash)
-MYSQL_REGION=${MYSQL_ZONE%-*}
-# Construct the instance connection name
-INSTANCE_CONNECTION_NAME="gc-bootcamp-14dfb3bf:us-central1:private-mysql-instance"
-# Secret names
-SECRET_DB_USER="DB_USER"
-SECRET_DB_PASS="DB_PASS"
-SECRET_DB_NAME="DB_NAME"
+
 #Alchemy instance template
 INSTANCE_TEMPLATE_NAME0="alchemy"
-# Retrieve secrets
-MYSQL_USER=$(gcloud secrets versions access latest --secret=$SECRET_DB_USER --project=$PROJECT_ID)
-MYSQL_PASSWORD=$(gcloud secrets versions access latest --secret=$SECRET_DB_PASS --project=$PROJECT_ID)
-MYSQL_DB_NAME=$(gcloud secrets versions access latest --secret=$SECRET_DB_NAME --project=$PROJECT_ID)
-SA_KEY=$(gcloud secrets versions access latest --secret="key" --project=$PROJECT_ID)
-#Private service acces
-IP_RANGE_NAME="default-google-managed-services-range"
-IP_RANGE_CIDR="10.100.0.0/24"
-SERVICE_NETWORKING_API="servicenetworking.googleapis.com"
+
 
 
 # Create instance template for alchemy
