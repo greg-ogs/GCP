@@ -21,7 +21,6 @@ PROJECT_ID=$(gcloud config get-value project)
 # Extract region from zone (remove the last part after the last dash)
 MYSQL_REGION=${MYSQL_ZONE%-*}
 # Construct the instance connection name
-INSTANCE_CONNECTION_NAME="gc-bootcamp-14dfb3bf:us-central1:private-mysql-instance"
 
 # Secret names
 SECRET_DB_USER="DB_USER"
@@ -124,7 +123,7 @@ gcloud compute instance-groups managed describe "${MIG_NAME}" \
 gcloud compute instance-groups managed list-instances "${MIG_NAME}" \
     --region="${REGION}" >> logs.txt
 
- Enable required APIs for MySQL
+# Enable required APIs for MySQL
 echo "Alert: Enabling required APIs for MySQL..."
 gcloud services enable sqladmin.googleapis.com --project=$PROJECT_ID
 
@@ -151,13 +150,14 @@ gcloud compute addresses create "$IP_RANGE_NAME" \
     --prefix-length=${IP_RANGE_CIDR#*/} \
     --addresses=${IP_RANGE_CIDR%/*}
 
-echo "Alert: Updating Private Services Access connection..."
-gcloud services vpc-peerings update \
-    --project=$PROJECT_ID \
-    --service=$SERVICE_NETWORKING_API \
-    --network="$VPC_NAME" \
-    --ranges="$IP_RANGE_NAME" \
-    --force
+## Try to update the connection
+#echo "Alert: Updating Private Services Access connection..."
+#gcloud services vpc-peerings update \
+#    --project=$PROJECT_ID \
+#    --service=$SERVICE_NETWORKING_API \
+#    --network="$VPC_NAME" \
+#    --ranges="$IP_RANGE_NAME" \
+#    --force
 
 # Create Private Services Access connection
 echo "Alert: Creating Private Services Access connection..."

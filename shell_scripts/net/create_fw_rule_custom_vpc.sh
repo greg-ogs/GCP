@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# For taguet instances
 
 VPC_NAME="cmtr-14dfb3bf-vpc"
 TARGET_TAG_SERVER="server"

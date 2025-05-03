@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create an instance template and a MIG in GCP using a flask application
+# The sql server from ./sql/alchemy_sql.sh is required
+
 # Define variables
 HEALTH_CHECK_NAME="common"
 MACHINE_TYPE="n1-standard-1"
@@ -14,8 +17,6 @@ PROJECT_ID=$(gcloud config get-value project)
 
 #Alchemy instance template
 INSTANCE_TEMPLATE_NAME0="alchemy"
-
-
 
 # Create instance template for alchemy
 gcloud compute instance-templates create "${INSTANCE_TEMPLATE_NAME0}" \
