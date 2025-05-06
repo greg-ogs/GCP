@@ -2,13 +2,13 @@ version: '3.8'
 
 services:
   nginx:
-    image: gregogs/alchemy-gc-sa:0.1
+    image: gregogs/alchemy:1.1
     ports:
-      - "8080:8080"
+      - "80:80"
     networks:
       - net-test
     volumes:
-      - ./mnt:/app
+      - ./mnt:/app/mnt
 networks:
   net-test:
     driver: bridge
