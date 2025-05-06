@@ -4,7 +4,7 @@ export PROJECT_ID=gc-bootcamp-14dfb3bf
 
 gcloud auth activate-service-account --key-file=/app/mnt/key.json
 
- gcloud config set project "${PROJECT_ID}"
+gcloud config set project "${PROJECT_ID}"
 
 # Start the Cloud SQL Proxy in the background.
 # Use the INSTANCE_CONNECTION_NAME environment variable.
