@@ -8,7 +8,7 @@ FIREWALL_RULE_NAME="defaul-allow-http"
 SSH_KEY="${USER}":"${KEY}"
 MIG_NAME="nginx"
 REGION="us-central1"
-ZONES="us-central1-a,us-central1-c"
+ZONES="us-central1-a"
 VPC_NAME="default"
 SUBNET=main""
 
@@ -94,8 +94,7 @@ systemctl restart nginx
 gcloud compute instance-groups managed create "${MIG_NAME}" \
     --project=$(gcloud config get-value project) \
     --template="${INSTANCE_TEMPLATE_NAME}" \
-    --region="${REGION}" \
-    --zones="${ZONES}" \
+    --zone="${ZONES}" \
     --size=2 \
     --base-instance-name="${INSTANCE_TEMPLATE_NAME}" \
     --health-check="${HEALTH_CHECK_NAME}" \
@@ -104,13 +103,13 @@ gcloud compute instance-groups managed create "${MIG_NAME}" \
 # Configure named ports
 gcloud compute instance-groups set-named-ports "${MIG_NAME}" \
     --named-ports=http:80 \
-    --region="${REGION}"
+    --zone="${ZONES}"
 #    --zone=$(echo "$ZONES" | cut -d ',' -f 1)
 
 # Configure autoscaling
 gcloud compute instance-groups managed set-autoscaling "${MIG_NAME}" \
     --project=$(gcloud config get-value project) \
-    --region="${REGION}" \
+    --zone="${ZONES}" \
     --min-num-replicas=1 \
     --max-num-replicas=2 \
     --target-cpu-utilization=0.5 \
@@ -119,9 +118,9 @@ gcloud compute instance-groups managed set-autoscaling "${MIG_NAME}" \
 
 # Check the MIG
 gcloud compute instance-groups managed describe "${MIG_NAME}" \
-    --region="${REGION}" >> logs.txt
+    --zone="${ZONES}" >> logs.txt
 gcloud compute instance-groups managed list-instances "${MIG_NAME}" \
-    --region="${REGION}" >> logs.txt
+    --zone="${ZONES}" >> logs.txt
 
 # Enable required APIs for MySQL
 echo "Alert: Enabling required APIs for MySQL..."
@@ -266,8 +265,7 @@ echo "Alert: Creating regional Managed Instance Group: ${MIG_NAME_ALCHEMY}..."
 gcloud compute instance-groups managed create "${MIG_NAME_ALCHEMY}" \
     --project="${PROJECT_ID}" \
     --template="${INSTANCE_TEMPLATE_ALCHEMY}" \
-    --region="${REGION_ALCHEMY}" \
-    --zones="${ZONES_ALCHEMY}" \
+    --zone="${ZONES_ALCHEMY}" \
     --size=1 `# Start with the minimum number of instances` \
     --base-instance-name="${MIG_NAME_ALCHEMY}-instance" \
     --health-check="${HEALTH_CHECK_NAME}" \
@@ -276,7 +274,7 @@ gcloud compute instance-groups managed create "${MIG_NAME_ALCHEMY}" \
 echo "Alert: Configuring autoscaling for ${MIG_NAME_ALCHEMY}..."
 gcloud compute instance-groups managed set-autoscaling "${MIG_NAME_ALCHEMY}" \
     --project="${PROJECT_ID}" \
-    --region="${REGION_ALCHEMY}" \
+    --zone="${ZONES_ALCHEMY}" \
     --min-num-replicas=1 \
     --max-num-replicas=2 \
     --target-cpu-utilization=0.5 \
@@ -285,7 +283,7 @@ gcloud compute instance-groups managed set-autoscaling "${MIG_NAME_ALCHEMY}" \
 echo "Alert: Configuring named ports for ${MIG_NAME_ALCHEMY}..."
 gcloud compute instance-groups set-named-ports "${MIG_NAME_ALCHEMY}" \
     --project="${PROJECT_ID}" \
-    --region="${REGION_ALCHEMY}" \
+    --zone="${ZONES_ALCHEMY}" \
     --named-ports=http:80
 
 echo "Alert: Managed Instance Group ${MIG_NAME_ALCHEMY} created and configured."
