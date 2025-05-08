@@ -17,7 +17,7 @@ provider "google" {
 
 # Create a VPC network
 resource "google_compute_network" "vpc_network" {
-  name                    = "${var.student_name}-${var.student_surname}-01-vpc"
+  name                    = "${var.name}-${var.surname}-01-vpc"
   auto_create_subnetworks = false
   mtu                     = 1460
   routing_mode            = "REGIONAL"
@@ -25,7 +25,7 @@ resource "google_compute_network" "vpc_network" {
 
 # Create the central subnetwork
 resource "google_compute_subnetwork" "subnetwork_central" {
-  name          = "${var.student_name}-${var.student_surname}-01-subnetwork-central"
+  name          = "${var.name}-${var.surname}-01-subnetwork-central"
   ip_cidr_range = "10.10.1.0/24"
   region        = "us-central1"
   network       = google_compute_network.vpc_network.id
@@ -33,7 +33,7 @@ resource "google_compute_subnetwork" "subnetwork_central" {
 
 # Create the east subnetwork
 resource "google_compute_subnetwork" "subnetwork_east" {
-  name          = "${var.student_name}-${var.student_surname}-01-subnetwork-east"
+  name          = "${var.name}-${var.surname}-01-subnetwork-east"
   ip_cidr_range = "10.10.3.0/24"
   region        = "us-east1"
   network       = google_compute_network.vpc_network.id

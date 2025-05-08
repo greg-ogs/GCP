@@ -11,14 +11,14 @@ variable "ssh_key" {
 }
 
 # Variables for student name and surname
-variable "student_name" {
-  description = "Student's first name"
+variable "name" {
+  description = "First name"
   type        = string
-  default     = "greg"  # Replace with your actual name
+  default     = "greg"
 }
 
-variable "student_surname" {
-  description = "Student's surname"
+variable "surname" {
+  description = "Surname"
   type        = string
-  default     = "greg-ogs"  # Replace with your actual surname
+  default     = "ogs"
 }
