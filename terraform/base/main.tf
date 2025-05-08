@@ -9,29 +9,10 @@ terraform {
   }
 }
 
-variable "project_id" {
-  description = "GCP Project ID"
-  type        = string
-}
-
-
 provider "google" {
   project     = var.project_id
   credentials = file("/terraform/.gcp/credentials.json")
   region      = "us-central1"
-}
-
-# Variables for student name and surname
-variable "student_name" {
-  description = "Student's first name"
-  type        = string
-  default     = "greg"  # Replace with your actual name
-}
-
-variable "student_surname" {
-  description = "Student's surname"
-  type        = string
-  default     = "greg-ogs"  # Replace with your actual surname
 }
 
 # Create a VPC network
@@ -58,15 +39,17 @@ resource "google_compute_subnetwork" "subnetwork_east" {
   network       = google_compute_network.vpc_network.id
 }
 
-# Output the created resources
-output "vpc_name" {
-  value = google_compute_network.vpc_network.name
+# Random string for unique bucket naming
+resource "random_string" "my_numbers" {
+  length  = 8
+  special = false
+  upper   = false
 }
 
-output "subnetwork_central_name" {
-  value = google_compute_subnetwork.subnetwork_central.name
-}
-
-output "subnetwork_east_name" {
-  value = google_compute_subnetwork.subnetwork_east.name
+# Google Cloud Storage bucket with unique name
+resource "google_storage_bucket" "epam_lab_bucket" {
+  name          = "epam-tf-lab-${random_string.my_numbers.result}"
+  location      = "us-central1"
+  force_destroy = true
+  uniform_bucket_level_access = true
 }
