@@ -22,3 +22,15 @@ variable "surname" {
   type        = string
   default     = "ogs"
 }
+
+variable "safe_ip_ranges" {
+  description = "Safe IP ranges for SSH and HTTP access (your IP or EPAM office IP ranges)"
+  type        = list(string)
+  default     = ["0.0.0.0/0"]  # Replace with actual safe IP ranges
+}
+
+variable "loadbalancer_ip_ranges" {
+  description = "Google Cloud Health Checks IP ranges"
+  type        = list(string)
+  default     = ["130.211.0.0/22", "35.191.0.0/16"]
+}
