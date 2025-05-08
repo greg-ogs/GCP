@@ -17,6 +17,8 @@ RUN git clone https://github.com/GoogleCloudPlatform/python-docs-samples  && \
     cd /app/python-docs-samples/cloud-sql/mysql/sqlalchemy && \
     /app/main/bin/pip install -r requirements.txt
 
+# use run to configure the service account from the image
+
 ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]

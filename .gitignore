@@ -1,2 +1,5 @@
 .idea
-/terraform/base/.gcp
+/terraform/base/.gcp/
+/terraform/base/.gcp/*
+*terraform.*
+*.terraform*
