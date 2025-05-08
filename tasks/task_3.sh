@@ -19,8 +19,8 @@ gcloud compute instances create "${VM1_NAME}" \
     --provisioning-model=STANDARD \
     --service-account="${SERVICE_ACCOUNT_NAME}" \
     --tags=http-server,https-server \
-    --create-disk=auto-delete=yes,boot=yes,device-name="${VM1_NAME}",image=projects/debian-cloud/global/images/debian-12-bookworm-v20250415,mode=rw,size=10 \
-    --create-disk=auto-delete=no,device-name="${ADDITIONAL_DISK_VM1_NAME}",mode=rw,size=10,type=pd-balanced \
+    --create-disk=auto-delete=yes,boot=yes,device-name="${VM1_NAME}",image=projects/debian-cloud/global/images/debian-12-bookworm-v20250415,size=10 \
+    --create-disk=auto-delete=no,boot=no,device-name="${ADDITIONAL_DISK_VM1_NAME}",size=10,type=pd-balanced \
     --reservation-affinity=any \
     --no-shielded-secure-boot \
     --shielded-vtpm \
@@ -53,19 +53,6 @@ gcloud compute snapshots create cmtr-14dfb3bf-snapshot \
 
 gcloud compute snapshots list --filter="sourceDisk.scope(disks)='$SOURCE_DISK'"
 
-# Second snapshot for testing bug
-
-#echo "Snapshot for bug"
-
-#gcloud compute snapshots create cmtr-5ff9f6d1-snapshot \
-#    --project=$(gcloud config get-value project) \
-#    --source-disk="${SOURCE_DISK}" \
-#    --source-disk-zone="${VM_ZONE}" \
-#    --storage-location=us-central1 \
-#    --snapshot-type=STANDARD
-#
-#gcloud compute snapshots list --filter="sourceDisk.scope(disks)='$SOURCE_DISK'"
-
 # Vm from snapshot
 
 echo "VM 2"
@@ -83,7 +70,7 @@ gcloud compute instances create "${VM2_NAME}" \
     --service-account="${SERVICE_ACCOUNT_NAME}" \
     --tags=http-server,https-server \
     --create-disk=auto-delete=yes,boot=yes,device-name="${VM2_NAME}",source-snapshot=cmtr-14dfb3bf-snapshot \
-    --create-disk=auto-delete=no,device-name="${ADDITIONAL_DISK_VM2_NAME}",mode=rw,size=10GB,type=pd-balanced \
+    --create-disk=auto-delete=no,boot=no,device-name="${ADDITIONAL_DISK_VM2_NAME}",size=10GB,type=pd-balanced \
     --no-shielded-secure-boot \
     --shielded-vtpm \
     --shielded-integrity-monitoring \
@@ -93,7 +80,7 @@ gcloud compute instances describe ${VM2_NAME} --zone="${VM_ZONE}" --format='get(
 
 gcloud compute instances add-metadata "${VM2_NAME}" --metadata serial-port-logging-enable=TRUE
 
-# Machine image from the vm
+ Machine image from the vm
 
 echo "Image creation"
 
@@ -103,12 +90,11 @@ IMAGE_DESCRIPTION="Custom Debian 12 image with Nginx pre-installed for EPAM task
 
 gcloud compute instances stop "${VM1_NAME}" --zone="${VM_ZONE}" --project="$(gcloud config get-value project)"
 sleep 30
-gcloud compute images create "${IMAGE_NAME}" \
+gcloud compute machine-images create "${IMAGE_NAME}" \
     --project="$(gcloud config get-value project)" \
-    --source-disk="${VM1_NAME}" \
-    --source-disk-zone="${VM_ZONE}" \
+    --source-instance="${VM1_NAME}" \
+    --source-instance-zone="${VM_ZONE}" \
     --description="${IMAGE_DESCRIPTION}" \
-    --family="${IMAGE_FAMILY}" \
     --storage-location="us-central1"
 
 gcloud compute instances start "${VM1_NAME}" --zone="${VM_ZONE}" --project="$(gcloud config get-value project)"
@@ -128,13 +114,12 @@ gcloud compute instances create "${VM3_NAME}" \
     --provisioning-model=STANDARD \
     --service-account="${SERVICE_ACCOUNT_NAME}" \
     --tags=http-server,https-server \
-    --image="${IMAGE_NAME}" \
-    --image-project="$(gcloud config get-value project)" \
-    --boot-disk-size=10GB
+    --source-machine-image="${IMAGE_NAME}" \
+    --boot-disk-size=10GB \
     --boot-disk-type=pd-balanced \
     --no-shielded-secure-boot \
     --shielded-vtpm \
     --shielded-integrity-monitoring \
     --reservation-affinity=any
 
-gcloud compute instances describe ${VM2_NAME} --zone="${VM_ZONE}" --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
+gcloud compute instances describe ${VM3_NAME} --zone="${VM_ZONE}" --format='get(networkInterfaces[0].accessConfigs[0].natIP)'

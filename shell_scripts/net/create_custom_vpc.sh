@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create custom VPC networks in GCP
+# In this case 2 subnets will be created
+
 VPC_NAME="cmtr-14dfb3bf-vpc"
 # Subnet configurations
 

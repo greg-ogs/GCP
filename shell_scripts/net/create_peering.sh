@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Create peering bidirectional
+# Create peering bidirectional with 2 owned networks
+# Peering with google private network is not for this and can be found in ./private_service_access.sh
 
 PEERING_NAME1="peer-cmtr-to-default"
 PEERING_NAME2="peer-default-to-cmtr"
