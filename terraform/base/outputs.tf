@@ -16,7 +16,7 @@ output "subnetwork_east_name" {
 }
 
 output "subnetworks_ids" {
-  value = toset([
+  value = tolist([
     google_compute_subnetwork.subnetwork_central.id,
     google_compute_subnetwork.subnetwork_east.id
   ])
@@ -32,11 +32,17 @@ output "bucket_id" {
 }
 
 # Output the project metadata id
-output "project_metadata_id" {
+output "project_id" {
   value = google_compute_project_metadata.ssh_keys.id
 }
 
 # Output the service account email for reference
 output "service_account_email" {
   value = google_service_account.epam_gcp_service_account.email
+}
+
+# Output the SSH key for use in compute instances
+output "ssh_key" {
+  value = var.ssh_key
+  sensitive = true
 }
