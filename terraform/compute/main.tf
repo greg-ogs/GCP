@@ -11,7 +11,7 @@ terraform {
 }
 
 provider "google" {
-  project     = data.terraform_remote_state.base.outputs.project_metadata_id
+  project     = data.terraform_remote_state.base.outputs.project_id
   credentials = file("/terraform/.gcp/credentials.json")
   region      = "us-central1"
 }

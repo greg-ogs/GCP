@@ -17,5 +17,5 @@ data "terraform_remote_state" "base" {
 # ${data.terraform_remote_state.base.outputs.subnetworks_ids}
 # ${data.terraform_remote_state.base.outputs.bucket_name}
 # ${data.terraform_remote_state.base.outputs.bucket_id}
-# ${data.terraform_remote_state.base.outputs.project_metadata_id}
+# ${data.terraform_remote_state.base.outputs.project_id}
 # ${data.terraform_remote_state.base.outputs.service_account_email}
