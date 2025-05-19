@@ -19,6 +19,20 @@ jobs:
           docker build -f ./pipeline/Dockerfile -t devopshint/node-app:latest .
           echo -n "verifying images:"
           docker images
+
+      - name: Save Docker image
+        run: |
+          export SHELL=/bin/bash
+          eval $(minikube -p minikube docker-env)
+          docker save devopshint/node-app:latest -o node-app.tar
+          echo "Docker image saved to node-app.tar"
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4 # Use the latest version
+        with:
+          name: node-app-docker-image
+          path: node-app.tar
+
       - name: Deploy to minikube
         run:
           kubectl apply -f ./pipeline/k8s-node-app.yaml
