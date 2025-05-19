@@ -11,7 +11,7 @@
 
 # Define variables
 PROJECT_ID=$(gcloud config get-value project)
-CLUSTER_NAME="private-cluster"
+CLUSTER_NAME="my-gke-cluster"
 REGION="us-central1"
 ZONE="${REGION}-a"
 MACHINE_TYPE="e2-medium"
